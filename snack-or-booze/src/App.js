@@ -1,53 +1,69 @@
 import React, { useState, useEffect } from "react";
-import { BrowserRouter } from "react-router-dom";
-import "./App.css";
-import Home from "./Home";
-import SnackOrBoozeApi from "./Api";
+import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 import NavBar from "./NavBar";
-import { Route, Switch } from "react-router-dom";
+import Home from "./Home";
 import Menu from "./FoodMenu";
-import Snack from "./FoodItem";
+import Item from "./FoodItem";
+import AddItem from "./AddItem";
+import SnackOrBoozeApi from "./Api";
+import "./App.css";
 
 function App() {
-  const [isLoading, setIsLoading] = useState(true);
-  const [snacks, setSnacks] = useState([]);
+	const [snacks, setSnacks] = useState([]);
+	const [drinks, setDrinks] = useState([]);
+	const [error, setError] = useState(null);
 
-  useEffect(() => {
-    async function getSnacks() {
-      let snacks = await SnackOrBoozeApi.getSnacks();
-      setSnacks(snacks);
-      setIsLoading(false);
-    }
-    getSnacks();
-  }, []);
+	useEffect(() => {
+		async function fetchData() {
+			try {
+				const snacks = await SnackOrBoozeApi.getSnacks();
+				const drinks = await SnackOrBoozeApi.getDrinks();
+				console.log("Fetched snacks:", snacks);
+				console.log("Fetched drinks:", drinks);
+				setSnacks(snacks);
+				setDrinks(drinks);
+			} catch (err) {
+				console.error("Error fetching data:", err);
+				setError(err.message);
+			}
+		}
+		fetchData();
+	}, []);
 
-  if (isLoading) {
-    return <p>Loading &hellip;</p>;
-  }
+	if (error) {
+		return <div className="error">Error: {error}</div>;
+	}
 
-  return (
-    <div className="App">
-      <BrowserRouter>
-        <NavBar />
-        <main>
-          <Switch>
-            <Route exact path="/">
-              <Home snacks={snacks} />
-            </Route>
-            <Route exact path="/snacks">
-              <Menu snacks={snacks} title="Snacks" />
-            </Route>
-            <Route path="/snacks/:id">
-              <Snack items={snacks} cantFind="/snacks" />
-            </Route>
-            <Route>
-              <p>Hmmm. I can't seem to find what you want.</p>
-            </Route>
-          </Switch>
-        </main>
-      </BrowserRouter>
-    </div>
-  );
+	return (
+		<div className="App">
+			<BrowserRouter>
+				<NavBar />
+				<main>
+					<Switch>
+						<Route exact path="/">
+							<Home snacks={snacks} drinks={drinks} />
+						</Route>
+						<Route exact path="/snacks">
+							<Menu items={snacks} title="Snacks" />
+						</Route>
+						<Route exact path="/drinks">
+							<Menu items={drinks} title="Drinks" />
+						</Route>
+						<Route exact path="/snacks/:id">
+							<Item items={snacks} cantFind="/not-found" />
+						</Route>
+						<Route exact path="/drinks/:id">
+							<Item items={drinks} cantFind="/not-found" />
+						</Route>
+						<Route exact path="/add">
+							<AddItem />
+						</Route>
+						<Redirect to="/" />
+					</Switch>
+				</main>
+			</BrowserRouter>
+		</div>
+	);
 }
 
 export default App;

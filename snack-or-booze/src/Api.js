@@ -1,21 +1,36 @@
 import axios from "axios";
 
-const BASE_API_URL = "http://localhost:5000";
-
-/* 
-  json-server will give you CRUD endpoints on snacks and drinks.
-  Here we've provided you with a single action to get all drinks.
-
-  You'll need to add to this class as you build features for the app.
-*/
+const BASE_URL = "http://localhost:5000";
 
 class SnackOrBoozeApi {
+	static async getSnacks() {
+		try {
+			const result = await axios.get(`${BASE_URL}/snacks`);
+			return result.data;
+		} catch (error) {
+			console.error("Error fetching snacks:", error.response);
+			throw error;
+		}
+	}
 
-  static async getSnacks() {
-    const result = await axios.get(`${BASE_API_URL}/snacks`);
-    return result.data;
-  }
-
+	static async getDrinks() {
+		try {
+			const result = await axios.get(`${BASE_URL}/drinks`);
+			return result.data;
+		} catch (error) {
+			console.error("Error fetching drinks:", error.response);
+			throw error;
+		}
+	}
+	static async addItem(type, itemData) {
+		try {
+			const result = await axios.post(`${BASE_URL}/${type}`, itemData);
+			return result.data;
+		} catch (error) {
+			console.error(`Error adding ${type}:`, error.response);
+			throw error;
+		}
+	}
 }
 
 export default SnackOrBoozeApi;

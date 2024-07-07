@@ -50,6 +50,30 @@
       "description": "Tart and delicious.",
       "recipe": "Mix arugula, toasted walnuts, and thinly-sliced Parmesan cheese. Dress with lemon and olive oil.",
       "serve": "Place on tiny, precious little plates."
+    },
+    {
+      "type": "snacks",
+      "name": "Candy",
+      "description": "Yum",
+      "recipe": "Yummy",
+      "serve": "Yummers",
+      "id": "TKQGVZn"
+    },
+    {
+      "type": "snacks",
+      "name": "Potato Chips",
+      "description": "Crisp, salty potato chips",
+      "recipe": "Potato, oil, fry",
+      "serve": "Room temp",
+      "id": "faun-Rp"
+    },
+    {
+      "type": "snacks",
+      "name": "Good Boy",
+      "description": "Yum",
+      "recipe": "testing",
+      "serve": "Yummers",
+      "id": "cxhu0hX"
     }
   ]
 }
